@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> <!-- Enlazar el archivo CSS -->
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        color: #daaa00 ;
+        font-size: 2.5rem;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 90%;
+        max-width: 500px;
+    }
+
+    .input-container {
+        margin: 15px 0;
+        width: 100%;
+    }
+
+    label {
+        margin-bottom: 8px;
+        font-size: 1.1rem;
+        color: #CFB991 ;
+        font-weight: bold;
+    }
+
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+    }
+
+    input[type="range"] {
+        width: 100%;
+        background-color: #ddd;
+        border-radius: 5px;
+        height: 8px;
+    }
+
+    .slider-value {
+        font-size: 1.2rem;
+        text-align: center;
+        margin-top: 5px;
+        color: #555;
+    }
+
+    button {
+        background-color: #CFB991 ;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #CFB991 ;
+    }
+
+    button:active {
+        background-color: #CFB991 ;
+    }
+
+    button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+</style>
+
+<body>
+    <h1>Admin Dashboard</h1>
+    <div class="container">
+        <!-- Number of stations -->
+        <div class="input-container">
+            <label for="stationCount">Number of Charging Stations:</label>
+            <input type="range" id="stationCount" min="5" max="50" value="5" />
+            <div class="slider-value" id="stationCountValue">5</div>
+        </div>
+
+        <!-- Player budget -->
+        <div class="input-container">
+            <label for="playerBudget">Player Budget:</label>
+            <input type="range" id="playerBudget" min="50" max="1000" value="100" step="10" />
+            <div class="slider-value" id="playerBudgetValue">100</div>
+        </div>
+
+        <!-- Minimum charge time -->
+        <div class="input-container">
+            <label for="minChargeTime">Minimum Charging Station Time (seconds):</label>
+            <input type="range" id="minChargeTime" min="10" max="60" value="30" step="10" />
+            <div class="slider-value" id="minChargeTimeValue">30</div>
+        </div>
+
+        <!-- Maximum charge time -->
+        <div class="input-container">
+            <label for="maxChargeTime">Maximum Charging Station Time (seconds):</label>
+            <input type="range" id="maxChargeTime" min="60" max="120" value="90" step="10" />
+            <div class="slider-value" id="maxChargeTimeValue">90</div>
+        </div>
+
+        <!-- Minimum Charging Station Price -->
+        <div class="input-container">
+            <label for="minPrice">Minimum Charging Station Price ($):</label>
+            <input type="range" id="minPrice" min="10" max="30" value="10" />
+            <div class="slider-value" id="minPriceValue">10</div>
+        </div>
+        <!-- Maximum Charging Station Price -->
+        <div class="input-container">
+            <label for="maxPrice">Maximum Charging Station Price ($):</label>
+            <input type="range" id="maxPrice" min="35" max="50" value="35" />
+            <div class="slider-value" id="maxPriceValue">35</div>
+        </div>
+
+        <!-- Button to update parameters -->
+        <button id="updateButton">Update Parameters</button>
+        
+        <!-- Game simulation controls -->
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #ddd;">
+            <h3>Game Simulation Control</h3>
+            <button id="simulationButton" style="background-color: #4CAF50; font-size: 18px; padding: 15px 30px;">Start Simulation</button>
+            <div id="simulationStatus" style="margin-top: 10px; font-weight: bold; color: #666;">
+                Status: Waiting to start simulation
+            </div>
+            
+            <!-- Station Configuration -->
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd;">
+                <h3>Station Configuration</h3>
+                <button id="stationConfigButton" style="background-color: #2196F3; font-size: 16px; padding: 12px 24px; margin-top: 10px;">
+                    <i class="fas fa-cog"></i> Configure Charging Stations
+                </button>
+                <p style="font-size: 14px; color: #666; margin-top: 8px;">
+                    Manually configure the position and properties of charging stations on the map
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+
+
+        // Obtener elementos de la interfaz
+        const stationCountInput = document.getElementById('stationCount');
+        const playerBudgetInput = document.getElementById('playerBudget');
+        const minChargeTimeInput = document.getElementById('minChargeTime');
+        const maxChargeTimeInput = document.getElementById('maxChargeTime');
+        const minPriceInput = document.getElementById('minPrice');
+        const maxPriceInput = document.getElementById('maxPrice');
+
+        // Obtener los valores de los sliders
+        const stationCountValue = document.getElementById('stationCountValue');
+        const playerBudgetValue = document.getElementById('playerBudgetValue');
+        const minChargeTimeValue = document.getElementById('minChargeTimeValue');
+        const maxChargeTimeValue = document.getElementById('maxChargeTimeValue');
+        const minPriceValue = document.getElementById('minPriceValue');
+        const maxPriceValue = document.getElementById('maxPriceValue');
+
+        const setInitialParameters = async () => {
+    try {
+        const response = await fetch('/admin-parameters');
+        adminParameters = await response.json();
+    } catch (error) {
+        console.error('there was an error getting parameters from server, using default values instead...', error);
+        adminParameters = {
+            stationCount: 5,
+            playerBudget: 100,
+            minChargeTime: 30,
+            maxChargeTime: 90,
+            minPrice: 10,
+            maxPrice: 35
+        }
+    } finally {
+        stationCountInput.value = adminParameters.stationCount;
+        playerBudgetInput.value = adminParameters.playerBudget;
+        minChargeTimeInput.value = adminParameters.minChargeTime;
+        maxChargeTimeInput.value = adminParameters.maxChargeTime;
+        minPriceInput.value = adminParameters.minPrice;
+        maxPriceInput.value = adminParameters.maxPrice;
+        stationCountValue.textContent = stationCountInput.value;
+        playerBudgetValue.textContent = playerBudgetInput.value;
+        minChargeTimeValue.textContent = minChargeTimeInput.value;
+        maxChargeTimeValue.textContent = maxChargeTimeInput.value;
+        minPriceValue.textContent = minPriceInput.value;
+        maxPriceValue.textContent = maxPriceInput.value;
+    }
+};
+setInitialParameters();
+        // Function to update values shown with sliders
+        stationCountInput.addEventListener('input', () => {
+            stationCountValue.textContent = stationCountInput.value;
+        });
+
+        playerBudgetInput.addEventListener('input', () => {
+            playerBudgetValue.textContent = playerBudgetInput.value;
+        });
+
+        minChargeTimeInput.addEventListener('input', () => {
+            minChargeTimeValue.textContent = minChargeTimeInput.value;
+        });
+
+        maxChargeTimeInput.addEventListener('input', () => {
+            maxChargeTimeValue.textContent = maxChargeTimeInput.value;
+        });
+
+        minPriceInput.addEventListener('input', () => {
+            minPriceValue.textContent = minPriceInput.value;
+        });
+        maxPriceInput.addEventListener('input', () => {
+            maxPriceValue.textContent = maxPriceInput.value;
+        });
+
+        // Function to update parameters
+        const updateButton = document.getElementById('updateButton');
+        updateButton.addEventListener('click', () => {
+            const stationCount = parseInt(stationCountInput.value);
+            const playerBudget = parseInt(playerBudgetInput.value);
+            const minChargeTime = parseInt(minChargeTimeInput.value);
+            const maxChargeTime = parseInt(maxChargeTimeInput.value);
+            const minPrice = parseInt(minPriceInput.value);
+            const maxPrice = parseInt(maxPriceInput.value);
+            if (
+                stationCount < 5 || playerBudget < 50 || minChargeTime < 10 || maxChargeTime < 60 || minChargeTime > maxChargeTime ||
+                minPrice < 10 || maxPrice < 35 || minPrice > maxPrice
+            ) {
+                alert('Please enter valid values!');
+                return;
+            }
+
+            // Here you send the data to the server to update the configuration
+            fetch('/admin-parameters', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ stationCount, playerBudget, minChargeTime, maxChargeTime, minPrice, maxPrice })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Parameters updated successfully!');
+            })
+            .catch(error => {
+                console.error('Error updating parameters:', error);
+            });
+        });
+
+        // Simulation control functionality
+        const simulationButton = document.getElementById('simulationButton');
+        const simulationStatus = document.getElementById('simulationStatus');
+        let isSimulationRunning = false;
+
+        // Get initial simulation state from server
+        fetch('/simulation-status')
+            .then(response => response.json())
+            .then(data => {
+                isSimulationRunning = data.isRunning;
+                updateSimulationUI();
+            })
+            .catch(error => {
+                console.error('Error getting simulation status:', error);
+            });
+
+        function updateSimulationUI() {
+            if (isSimulationRunning) {
+                simulationButton.textContent = 'End Simulation';
+                simulationButton.style.backgroundColor = '#f44336';
+                simulationStatus.textContent = 'Status: Simulation is running';
+                simulationStatus.style.color = '#4CAF50';
+            } else {
+                simulationButton.textContent = 'Start Simulation';
+                simulationButton.style.backgroundColor = '#4CAF50';
+                simulationStatus.textContent = 'Status: Waiting to start simulation';
+                simulationStatus.style.color = '#666';
+            }
+        }
+
+        simulationButton.addEventListener('click', () => {
+            const action = isSimulationRunning ? 'stop' : 'start';
+            
+            fetch('/simulation-control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: action })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    isSimulationRunning = !isSimulationRunning;
+                    updateSimulationUI();
+                    alert(data.message);
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error controlling simulation:', error);
+                alert('There was an error controlling the simulation.');
+            });
+        });
+
+        // Station configuration button functionality
+        const stationConfigButton = document.getElementById('stationConfigButton');
+        stationConfigButton.addEventListener('click', () => {
+            // Navigate to the station configuration page
+            window.location.href = '/station-config';
+        });
+    </script>
+</body>
+</html>

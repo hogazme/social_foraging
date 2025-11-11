@@ -1,0 +1,14 @@
+{
+  "stations": [
+    {
+      "id": "station-0",
+      "left": 600,
+      "top": 400,
+      "cost": 35,
+      "sockets": 4,
+      "chargeTime": 50,
+      "activeChargers": 0
+    }
+  ],
+  "timestamp": "2025-09-18T20:16:29.311Z"
+}
