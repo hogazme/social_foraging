@@ -828,7 +828,7 @@ app.post('/simulation-control', (req, res) => {
 
 // Start the server
 // const PORT = process.env.PORT || 3000;
-httpServer.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Listening on ${PORT}`);
 });
 
