@@ -7,9 +7,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <!-- Add Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-
-        
         /* Estilo general del cuerpo */
         body {
             display: flex;
@@ -525,6 +524,17 @@
             font-size: 16px;
             color: white;
         }
+
+        .branding .logo-container img {
+            height: 75px !important;   /* make them ~6× smaller */
+            width: 80px !important;
+            object-fit: contain;
+        }
+
+        /* Make sure the UI panel sits below the branding header */
+        .ui-container {
+            top: 90px !important;
+        }
     </style>
     <!-- <script src="/socket.io/socket.io.js"></script> -->
 </head>
@@ -552,7 +562,19 @@
         <div class="item-indicator" id="item-indicator">No item</div> <!-- Item indicator -->
 
         <button id="reset-button">Reset Car</button> <!-- Reset button -->
+
+        <header class="branding">
+        <div class="logo-container">
+            <img src="Rice_logo.png" alt="Logo 1">
+            <img src="Purdue_logo.png" alt="Logo 2">
+            <img src="NSF_logo.png" alt="Logo 3">
+        </div>
+        <p class="award-text">Supported by NSF Award BCS #2323732</p>
+        </header>
+
     </div>
+
+
 
     <div class="map-container">
         <div class="map" id="map">
