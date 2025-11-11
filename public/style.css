@@ -142,3 +142,14 @@ input[type="number"]::-webkit-inner-spin-button {
     top: 90px;                          /* was 10px in your inline CSS */
 }
 
+.instruction-text {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #444;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 6px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    text-align: center;
+    line-height: 1.4;
+}
