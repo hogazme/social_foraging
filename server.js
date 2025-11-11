@@ -21,7 +21,7 @@ let AdminParams  = adminData;
 // Port configuration
 const PORT = process.env.PORT || 3000;
 // added later
-const path = require('path');
+// const path = require('path');
 app.use(require('express').static(path.join(__dirname, 'public')));
 // Simulation state
 let isSimulationRunning = false;
